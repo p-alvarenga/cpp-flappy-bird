@@ -2,7 +2,19 @@
 
 Game::Game() : 
 	window(sf::VideoMode(def::window::WIDTH, def::window::HEIGHT), def::window::TITLE)
-{}
+{
+	try 
+	{
+		texture_holder.load(def::textures::player, def::textures::path::player);	
+		player.setSprite(texture_holder.get(def::textures::player));
+		
+		player.setPosition(float(720/2),float(405/2)); 
+	}
+	catch (std::runtime_error* error) 
+	{
+		std::cout << "ERROR: " << error->what();
+	}
+}
 
 void Game::run() 
 {
@@ -16,7 +28,6 @@ void Game::run()
 		delta += clock.restart();
 
 		processEvents();
-		render(); 
 
 		while (delta > time_per_frame) 
 		{
@@ -24,9 +35,9 @@ void Game::run()
 			processEvents();
 			update();
 		}
+
 		render();
 	}
-
 	return;
 }
 
@@ -55,7 +66,9 @@ void Game::update()
 
 void Game::render() 
 {
+	window.clear(); 
 	window.draw(player.getSprite()); 
+	window.display();
 
 	return;
 }
